@@ -1,4 +1,6 @@
 import { db, auth, mode } from "app/db.real.js"
+// Above uses a real firebase db - fake is not real
+// import { db, auth, mode } from "app/db.fake.js"
 
 import {
   differenceInDays,
