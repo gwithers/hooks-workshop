@@ -20,8 +20,40 @@ import ProgressCircle from "app/ProgressCircle"
 // so we can calculate the rings on their avatar. Right now, it's just empty.
 
 export default function Avatar({ uid, size = 50, bg, className, ...rest }) {
-  const user = null
-  const posts = null
+  const [user, setUser] = useState(null)
+  const [posts, setPosts] = useState(null)
+
+  // typically this would be done in componentDidMount
+  // what is better?
+  // if the user changes, this will change
+  useEffect(() => {
+    let mounted = true;
+
+    // this is async (async await)
+    fetchUser(uid).then(user => {
+      // timing ... this could fire and the component is not mounted anymore
+      if (mounted) {
+        setUser(user)
+      } else {
+        console.log("Too late!  Don't need you anymore!");
+      }
+    })
+
+    // cleanup function runs when the component unmounts
+    return () => {
+      mounted = false;
+      console.log('bah-bye!')
+    };
+  }, [uid])
+
+  // See how we return the cleanup function
+  // Also now handling the posts ring around avatar
+  useEffect(() => {
+    let cleanup = subscribeToPosts(uid, posts => {
+      setPosts(posts)
+    })
+    return cleanup;
+  }, [uid])
 
   if (!user) {
     return (

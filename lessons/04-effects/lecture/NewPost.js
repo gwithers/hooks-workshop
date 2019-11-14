@@ -15,12 +15,26 @@ const MAX_MESSAGE_LENGTH = 200
 
 export default function NewPost({ takeFocus, date, onSuccess, showAvatar }) {
   const [{ auth }] = useAppState()
-  const [message, setMessage] = useState("Ran around the lake.")
+  const [message, setMessage] = useState("Got up off the couch!")
   const messageTooLong = message.length > MAX_MESSAGE_LENGTH
 
-  function handleMessageChange(event) {
-    setMessage(event.target.value)
-  }
+  let countRef = useRef();
+
+  // function handleMessageChange(event) {
+  //   let message = event.target.value;
+  //   setMessage(message);
+  //   //countRef.current.textContent = message.length;
+  // }
+
+  // Callback to change message value
+  let handleMessageChange = (event) => {setMessage(event.target.value)};
+
+  // Effect hooking message in state and setting length
+  // cool -- handles if changed by recent drop down, initial state, or when there is a change
+  useEffect(() => {
+    countRef.current.textContent = message.length;
+    document.title = 'New Post! ' + message.slice(0, 10) + '...';
+  }, [message]);
 
   return (
     <div className={"NewPost" + (messageTooLong ? ` ${errorClass}` : "")}>
@@ -33,12 +47,13 @@ export default function NewPost({ takeFocus, date, onSuccess, showAvatar }) {
           onChange={handleMessageChange}
         />
         <div className="NewPost_char_count">
-          <span>{message.length}</span>/{MAX_MESSAGE_LENGTH}
+          <span ref={countRef} />/{MAX_MESSAGE_LENGTH}
         </div>
         <RecentPostsDropdown
           uid={auth.uid}
           onSelect={message => {
             setMessage(message)
+            //countRef.current.textContent = message.length
           }}
         />
         <div className="NewPost_buttons">

@@ -11,18 +11,37 @@ const MAX_MESSAGE_LENGTH = 200
 
 export default function NewPost({ takeFocus, date, onSuccess, showAvatar }) {
   const [{ auth }] = useAppState()
-  const [message, setMessage] = useState('Ran around the lake.')
+  const key = makeNewPostKey(date)
+  const [message, setMessage] = useState(
+    getLocalStorageValue(key) || 'Got up off the couch!')
   const messageTooLong = message.length > MAX_MESSAGE_LENGTH
+
+  const messageRef = useRef();
 
   function handleMessageChange(event) {
     setMessage(event.target.value)
   }
+
+  // saving in local storage
+  // if date or message changes, set the local storage key/value to save the pending data
+  useEffect(() => {
+    setLocalStorage(key, message)
+  }, [key, message]);
+
+  //
+  // This is a little odd but lets us take focus when we are appearing as a new component
+  useEffect(() => {
+    if (takeFocus) {
+      messageRef.current.focus();
+    }
+  }, [takeFocus])
 
   return (
     <div className={'NewPost' + (messageTooLong ? ' NewPost_error' : '')}>
       {showAvatar && <Avatar uid={auth.uid} size={70} />}
       <form className="NewPost_form">
         <textarea
+          ref={messageRef}
           className="NewPost_input"
           placeholder="Tell us about your workout!"
           value={message}

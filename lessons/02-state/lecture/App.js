@@ -1,27 +1,72 @@
 import "./styles.css"
 import React, { useState } from "react"
-import { FaMinus, FaPlus } from "react-icons/fa"
+import { FaMinus, FaPlus, FaWindowClose } from "react-icons/fa"
 
 /**********************************************************/
 // We can render with values put into variables:
 
 export default function Minutes() {
-  const minutes = 5
+  // Was
+  // const minutes = 5
+  // Now use a state - initial value and method
+
+  const [minutes, setMinutes] = useState(5);
+  const [error, setError] = useState(null);
+
+  function handleSubtract() {
+    console.log('removing...was: ' + minutes);
+    if (minutes > 1) {
+      setMinutes(minutes - 1);
+      setError(null);
+    } else {
+      setError('Crap!  No workout!');
+    }
+  }
+
+  function handleAddition() {
+    console.log('adding... was: ' + minutes);
+    if (minutes < 10) {
+      setMinutes(minutes + 1);
+      setError(null);
+    } else {
+      setError('The hell you say??');
+    }
+  }
+
+  function clearError() {
+    console.log('cancel the error');
+    setError(null);
+  }
+
   return (
     <div className="Minutes">
       <div>
-        <button type="button" className="icon_button Minutes_button">
+        <button
+          type="button"
+          className="icon_button Minutes_button"
+          onClick={handleSubtract}
+        >
           <FaMinus />
         </button>
       </div>
       <div className="Minutes_label" htmlFor="minutes">
-        {minutes} Minutes
+        {minutes} Moments
       </div>
       <div>
-        <button type="button" className="icon_button Minutes_button">
+        <button
+          type="button"
+          className="icon_button Minutes_button"
+          onClick={handleAddition}
+        >
           <FaPlus />
         </button>
       </div>
+
+      {error && (
+        <div style={{ color: 'red'}}>
+          {error} <FaWindowClose onClick={clearError}/>
+        </div>
+      )}
     </div>
   )
 }
