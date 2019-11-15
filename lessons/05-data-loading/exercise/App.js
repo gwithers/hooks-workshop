@@ -5,11 +5,20 @@ import LoggedIn from 'app/LoggedIn'
 import LoggedOut from 'app/LoggedOut'
 
 export default function App() {
-  const auth = null
-  const authAttempted = false
+  const [auth, setAuth] = useState(null);
+  const [authAttempted, setAuthAttempted] = useState(false);
+
+  useEffect(() => {
+    console.log('checking authentication');
+    let cleanup = onAuthStateChanged(auth => {
+      setAuthAttempted(true);
+      setAuth(auth);
+    });
+    return cleanup;
+  }, []);
 
   if (!authAttempted) {
-    return <p>Authenticating...</p>
+    return <p><b>Authenticating</b> (after a <i>fashion</i>)...</p>
   }
 
   return (

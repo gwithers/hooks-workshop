@@ -4,7 +4,7 @@ import LoginForm from "app/LoginForm"
 import SignupForm from "app/SignupForm"
 import About from "app/About"
 
-function Tabs({ data }) {
+function Tabs({ data, disabled }) {
   const [activeIndex, setActiveIndex] = useState(0)
 
   return (
@@ -12,12 +12,17 @@ function Tabs({ data }) {
       <div data-reach-tab-list>
         {data.map((tab, index) => {
           const isActive = index === activeIndex
+          const isDisabled = disabled.includes(index)
           return (
             <div
               data-reach-tab
               key={index}
-              className={isActive ? "active" : ""}
-              onClick={() => setActiveIndex(index)}
+              className={isDisabled ? "disabled": isActive ? "active" : ""}
+              onClick={() => {
+                if (!isDisabled) {
+                  setActiveIndex(index)
+                }
+              }}
             >
               {tab.label}
             </div>
@@ -44,7 +49,7 @@ export default function LoggedOut() {
   return (
     <div className="LoggedOut">
       <About />
-      <Tabs data={tabData} />
+      <Tabs data={tabData} disabled={[]}/>
     </div>
   )
 }
