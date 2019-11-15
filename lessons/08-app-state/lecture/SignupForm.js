@@ -78,11 +78,11 @@ export default function SignupForm() {
 //     (state, action) => {
 //       switch (action.type) {
 //         case "SIGNING_UP":
-//           return { ...state, loading: true }
+//           return { ...state, loading: true, error: null }
 //         case "SIGNUP_ERROR":
 //           return { ...state, error: action.error, loading: false }
 //         case "UPDATE_DATE":
-//           return { ...state, startDate: action.date }
+//           return { ...state, startDate: action.date, error: null, loading: false }
 //         default: {
 //         }
 //       }

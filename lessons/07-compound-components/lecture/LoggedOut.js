@@ -38,7 +38,7 @@ export default function LoggedOut() {
   const tabData = [
     {
       label: "Login",
-      content: <LoginForm />
+      content: <LoginForm/>
     },
     {
       label: "Signup",

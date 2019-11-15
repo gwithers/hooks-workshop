@@ -5,6 +5,9 @@ const appStateReducer = (state, action) => {
     case "AUTH_CHANGE": {
       return { ...state, auth: action.auth, authAttempted: true }
     }
+    case "AUTH_USER_LOGGED_IN": {
+      return { ...state, user: action.user }
+    }
     default:
       return state
   }
